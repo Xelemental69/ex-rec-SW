@@ -10,7 +10,7 @@ if(!$obj){
     $url = DIR_SERV . "/salir";
     consumir_servicios_REST($url, "POST", $key);
     session_destroy();
-    die();
+    die(error_page("EXAM_REC_SW_22_23", "Error servicio", "<p>Error consumiendo el servicio: " . $url . "</p>" . $respuesta));
 
 }
 
@@ -19,7 +19,7 @@ if(isset($obj->error)){
     $url = DIR_SERV . "/salir";
     consumir_servicios_REST($url, "POST", $key);
     session_destroy();
-    die();
+    die(error_page("EXAM_REC_SW_22_23", "Error servicio", $obj->error));
 
 }
 

@@ -19,9 +19,9 @@
             $equipo++;
 
             echo '<td><form action="index.php" method="post">';
-            echo '<input type="hidden" name="dia" value="$j" />';
-            echo '<input type="hidden" name="hora" value="$i" />';
-            echo '<button type="submit" name="checkGuardia" class="enlace" value="' . $equipo . '">Equipo ' . $equipo . ' </button></form><td>';
+            echo '<input type="hidden" name="dia" value="' . $j . '" />';
+            echo '<input type="hidden" name="hora" value="' . $i . '" />';
+            echo '<button type="submit" name="checkGuardia" class="enlace" value="' . $equipo . '">Equipo ' . $equipo . ' </button></form></td>';
 
         }
         echo "<tr>";
@@ -39,9 +39,9 @@
             $equipo++;
 
             echo '<td><form action="index.php" method="post">';
-            echo '<input type="hidden" name="dia" value="$j" />';
-            echo '<input type="hidden" name="hora" value="$i" />';
-            echo '<button type="submit" name="checkGuardia" class="enlace" value="' . $equipo . '">Equipo ' . $equipo . ' </button></form><td>';
+            echo '<input type="hidden" name="dia" value="' . $j . '" />';
+            echo '<input type="hidden" name="hora" value="' . $i . '" />';
+            echo '<button type="submit" name="checkGuardia" class="enlace" value="' . $equipo . '">Equipo ' . $equipo . ' </button></form></td>';
 
         }
         echo "<tr>";

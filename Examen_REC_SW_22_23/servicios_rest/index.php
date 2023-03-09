@@ -30,25 +30,31 @@ $app->post('/login', function($request){
 });
 
 $app->get('/logueado', function($request){
-
-    $datos[] = $request->getParam('usuario');
-    $datos[] = $request->getParam('clave');
-    $datos[] = $request->getParam('api_session');
-    
-    echo json_encode(login($datos, false));
+    session_id($request->getParam('api_session'));
+    session_start();
+    if (isset($_SESSION["usuario"])) {
+        $datos[] = $_SESSION["usuario"];
+        $datos[] = $_SESSION["clave"];
+        echo json_encode(login($datos, false));
+    } else {
+        session_destroy();
+        echo json_encode(array("no_auth" => "No tienes permiso para usar este servicio"));
+    }
 
 });
 
 $app->get('/usuario/{id_usuario}', function($request){
 
-    if(($request->getParam("api_session")) == " "){
+    session_id($request->getParam('api_session'));
+    session_start();
+    if (isset($_SESSION["usuario"])) {
 
         $datos[] = $request->getAttribute("id_usuario");
 
         echo json_encode(getUser($datos));
 
     }else{
-
+        session_destroy();
         echo json_encode(array("no_auth" => "No tienes permisos para usar este servicio"));
 
     }
@@ -57,7 +63,9 @@ $app->get('/usuario/{id_usuario}', function($request){
 
 $app->get('/usuariosGuardia/{dia}/{hora}', function($request){
 
-    if(($request->getParam("api_session")) == " "){
+    session_id($request->getParam('api_session'));
+    session_start();
+    if (isset($_SESSION["usuario"])) {
 
         $datos[] = $request->getAttribute("dia");
         $datos[] = $request->getAttribute("hora");
@@ -65,7 +73,7 @@ $app->get('/usuariosGuardia/{dia}/{hora}', function($request){
         echo json_encode(usuariosGuardia($datos));
 
     }else{
-
+        session_destroy();
         echo json_encode(array("no_auth" => "No tienes permisos para usar este servicio"));
 
     }
@@ -74,7 +82,9 @@ $app->get('/usuariosGuardia/{dia}/{hora}', function($request){
 
 $app->get('/deGuardia/{dia}/{hora}/{id_usuario}', function($request){
 
-    if(($request->getParam("api_session")) == " "){
+    session_id($request->getParam('api_session'));
+    session_start();
+    if (isset($_SESSION["usuario"])) {
 
         $datos[] = $request->getAttribute("dia");
         $datos[] = $request->getAttribute("hora");
@@ -83,7 +93,7 @@ $app->get('/deGuardia/{dia}/{hora}/{id_usuario}', function($request){
         echo json_encode(deGuardia($datos));
 
     }else{
-
+        session_destroy();
         echo json_encode(array("no_auth" => "No tienes permisos para usar este servicio"));
 
     }

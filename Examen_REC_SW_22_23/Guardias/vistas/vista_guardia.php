@@ -29,33 +29,35 @@ if (isset($obj->mensaje)) {
 
     $respuesta = consumir_servicios_REST($url, "GET", $key);
 
-    $obj = json_decode($respuesta);
+    $lista = json_decode($respuesta);
 
-    if (!$obj) {
+    if (!$lista) {
 
         session_destroy();
         die(error_page("EXAM_REC_SW_22_23", "Error servicio", "Error al conectar con la base de datos"));
     }
 
-    if (isset($obj->error)) {
+    if (isset($lista->error)) {
 
         session_destroy();
-        die(error_page("EXAM_REC_SW_22_23", "Error servicio", $obj->errror));
+        die(error_page("EXAM_REC_SW_22_23", "Error servicio", $lista->errror));
     }
 
-    if (isset($obj->mensaje)) {
+    if (isset($lista->mensaje)) {
 
-        echo $obj->mensaje;
+        echo $lista->mensaje;
     } else {
 
         $once = true;
-        $rows = count($obj->usuarios);
+        $rows = 0;
 
         echo "<table>";
 
         echo "<tr><th>Profesores de Guardia</th><th>Información del Profesor con id_usuario</th></tr>";
 
-        foreach ($obj->usuarios as $profesor) {
+        foreach ($lista->usuarios as $profesor) {$rows++;}
+
+        foreach ($lista->usuarios as $profesor) {
 
             echo "<tr>";
 
@@ -64,7 +66,7 @@ if (isset($obj->mensaje)) {
             echo '<input type="hidden" name="hora" value="' . $_POST["hora"] . '" />';
             echo '<input type="hidden" name="id_usuario" value="' . $profesor->id_usuario . '" />';
             echo '<button type="submit" name="checkGuardia" class="enlace" value="' . $_POST["checkGuardia"] . '">' . $profesor->nombre . ' </button>';
-            echo '</form><td>';
+            echo '</form></td>';
 
             if ($once) {
 
@@ -72,33 +74,34 @@ if (isset($obj->mensaje)) {
 
                 if (isset($_POST["id_usuario"])) {
 
-                    $url = DIR_SERV . "/deGuardia/" . $_POST["dia"] . "/" . $_POST["hora"] . "/" . $_POST["id_usuario"];
+                    $url = DIR_SERV . "/usuario/" . $_POST["id_usuario"];
 
                     $respuesta = consumir_servicios_REST($url, "GET", $key);
 
-                    $obj = json_decode($respuesta);
+                    $user = json_decode($respuesta);
 
-                    if (!$obj) {
+                    if (!$user) {
 
                         session_destroy();
                         die(error_page("EXAM_REC_SW_22_23", "Error servicio", "Error al conectar con la base de datos"));
                     }
 
-                    if (isset($obj->error)) {
+                    if (isset($user->error)) {
 
                         session_destroy();
-                        die(error_page("EXAM_REC_SW_22_23", "Error servicio", $obj->errror));
+                        die(error_page("EXAM_REC_SW_22_23", "Error servicio", $user->errror));
                     }
 
-                    if (isset($obj->mensaje)) {
+                    if (isset($user->mensaje)) {
 
-                        echo '<p>El profesor ya no se encuentra en esa hora</p>';
+                        echo 'El profesor ya no se encuentra en esa hora';
+
                     } else {
 
-                        echo "<strong>Nombre:</strong> " . $obj->profesor->nombre . "<br/>";
-                        echo "<strong>Usuario:</strong> " . $obj->profesor->usuario . "<br/>";
+                        echo "<strong>Nombre:</strong> " . $user->usuario->nombre . "<br/>";
+                        echo "<strong>Usuario:</strong> " . $user->usuario->usuario . "<br/>";
                         echo "<strong>Contraseña:</strong> <em>(Oculto por privacidad)</em><br/>";
-                        echo "<strong>Email:</strong> " . $obj->profesor->email . "<br/>";
+                        echo "<strong>Email:</strong> " . $user->usuario->email . "<br/>";
 
                     }
                 }

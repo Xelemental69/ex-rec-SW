@@ -24,39 +24,34 @@ function login($datos, $first_time=true){
         
         try{
 
-            $consulta = "select * from usuarios where usuario=? and clave=?";
-            
-            $sentencia = $conexion->prepare($consulta);
-            $sentencia->execute($datos);
+            try{
 
-            if($sentencia->rowCount() > 0){
-
-                $respuesta["usuario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
-
-                if($first_time){
-
-                    $_SESSION["usuario"] = $datos[0];
-                    $_SESSION["clave"] = $datos[1];
-                    $_SESSION["ultimo_acceso"] = time();
-                    $respuesta["api_session"] = session_id();
-
-                }else if(isset($datos[2])){
-
-                    session_id($datos[2]);
-                    session_start();
-
-                    $_SESSION["ultimo_acceso"] = time();
-
+                $consulta = "select * from usuarios where usuario=? and clave=?";
+                
+                $sentencia = $conexion->prepare($consulta);
+                $sentencia->execute($datos);
+    
+                if($sentencia->rowCount() > 0){
+    
+                    $respuesta["usuario"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+    
+                    if($first_time){
+    
+                        session_name("API_REC_SW_22_23");
+                        session_start();
+    
+                        $_SESSION["usuario"] = $datos[0];
+                        $_SESSION["clave"] = $datos[1];
+                        $respuesta["api_session"] = session_id();
+    
+                    }
+    
                 }else{
-
-                    $respuesta["no_logged"] = "no se pudo iniciar sesión";
-
+    
+                    $respuesta["mensaje"] = "El usuario no se encuentra registrado en la BD";
+    
                 }
-
-            }else{
-
-                $respuesta["mensaje"] = "El usuario no se encuentra registrado en la BD";
-
+                
             }
             
         }
@@ -118,14 +113,14 @@ function usuariosGuardia($datos){
         
         try{
 
-            $consulta = "SELECT * from usuarios JOIN horario_guardias WHERE usuarios.id_usuario=horario_guardias.usuario and dia=? and hora=?;";
+            $consulta = "select * from usuarios join horario_guardias where usuarios.id_usuario=horario_guardias.usuario and dia=? and hora=?";
             
             $sentencia = $conexion->prepare($consulta);
             $sentencia->execute($datos);
 
             if($sentencia->rowCount() > 0){
 
-                $respuesta["usuarios"] = $sentencia->fetch(PDO::FETCH_ASSOC);
+                $respuesta["usuarios"] = $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
             }else{
 

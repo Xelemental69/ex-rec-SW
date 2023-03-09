@@ -39,14 +39,20 @@ define("DIR_SERV", "http://localhost/Proyectos/Examen_REC_SW_22_23/servicios_res
 
     <?php        
 
+        $salto = "index.php";
+
         session_name("EXAM_REC_SW_22_23");
         session_start();
+
+        if(isset($_POST["btnSalir"])){
+            session_destroy();
+            header("Location:" . $salto);
+            exit;
+        }
 
         if(isset($_SESSION["usuario"]) && isset($_SESSION["clave"]) && isset($_SESSION["id_usuario"])){
 
             require "src/seguridad.php";
-
-            echo "Sesion iniciada";
 
             require "vistas/vista_principal.php";
 
@@ -57,9 +63,11 @@ define("DIR_SERV", "http://localhost/Proyectos/Examen_REC_SW_22_23/servicios_res
 
             require "vistas/vista_login.php";
 
+            if (isset($_SESSION["seguridad"])) echo '<p>'.$_SESSION["seguridad"].'</p>';
+
         }
 
-        if(isset($_SESSION["seguridad"])) echo $_SESSION["seguridad"];
+        
 
     ?>
 

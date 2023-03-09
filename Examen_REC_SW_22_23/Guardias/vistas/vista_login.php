@@ -21,7 +21,7 @@ if(isset($_POST["btnLogin"])){
         if(!$obj){
 
             session_destroy();
-            die(error_page("EXAM_REC_SW_22_23","Error servicio","Error al conectar con la base de datos"));
+            die(error_page("EXAM_REC_SW_22_23","Error servicio","<p>Error consumiendo el servicio: " . $url . "</p>" . $respuesta));
         
         }
         
